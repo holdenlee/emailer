@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./Emailer "COS433/MAT473 Grades" "holdenl@princeton.edu" "zeev.dvir@gmail.com" "C:/Users/Owner/Dropbox/crypto16/graded exams/" "grades.csv" "email.txt" "@princeton.edu" "email_grades"

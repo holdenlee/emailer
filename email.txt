@@ -1,0 +1,15 @@
+Dear NAME,
+
+Please see attached your graded final. 
+
+Your homework average, dropping the lowest grade, was: HW
+You final exam grade was: EXAM
+
+Your final numeric grade for the course is AVG
+
+If you believe there is any mistake in these numbers please email Prof. Dvir asap. 
+Letter grades will be posted online in a few days.
+
+All Grades: (Please note that PS4 was normalized out of 110 points.)
+PS1|PS2|PS3|PS4|PS5|PS6|PS7|PS8|PS9|PS10|Homework Average (excluding lowest grade)|Final|FINAL GRADE
+SCORES
