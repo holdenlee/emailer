@@ -62,23 +62,27 @@ data Options = Options
    , _optNoMatch :: String
    , _optOutput :: Maybe String
    , _optQuestions :: String
-   , _optScript :: Maybe String}
+   , _optScript :: Maybe String
+   , _optInput :: Maybe String
+   , _optData :: Maybe String}
 
 makeLenses ''Options
 
 defaultOptions = Options
    { _optWeek = 1,
-     _optCSV = "responses.txt",
+     _optCSV = "responses.csv",
      _optFrom = "holdenl@princeton.edu",
      _optMatch = "hearts.txt",
      _optNoMatch = "pass.txt",
      _optOutput = Nothing,
      _optQuestions = "questions.txt",
-     _optScript = Nothing}
+     _optScript = Nothing,
+     _optInput = Nothing, 
+     _optData = Nothing}
 
-getOptions :: Options -> (Int, String, String, String, String, String, String, String)
+getOptions :: Options -> (Int, String, String, String, String, String, String, String, String)
 getOptions opt = let w = opt^.optWeek in
-    (w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y})
+    (w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, case opt^.optInput of {Nothing -> printf "data_%d.txt" (w-1); Just y -> y}, case opt^.optData of {Nothing -> printf "data_%d.txt" (w); Just y -> y})
 
 {-
 makeOpt :: a -> String -> ArgDescr a 
@@ -93,8 +97,7 @@ modOpt lens = OptArg (\my opts -> case my of
 maybeModOpt lens =  OptArg (\my opts -> case my of
                                         Nothing -> opts
                                         Just x -> opts & lens .~ Just (read x)) 
-             
-{-(w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y})-}     
+                 
 options :: [OptDescr (Options -> Options)]
 options =
     [ Option ['w'] ["week"] (modOpt optWeek "WEEK") "week number",
@@ -102,9 +105,11 @@ options =
       Option ['f'] ["from"] (modOpt optFrom "FROM") "from email",
       Option ['m'] ["match"] (modOpt optMatch "MATCH") "match email text",
       Option ['n'] ["nomatch"] (modOpt optNoMatch "NOMATCH") "no-match email text",
-      Option ['o'] ["output"] (maybeModOpt optOutput "OUTPUT") "output file",
+      Option ['o'] ["output"] (maybeModOpt optOutput "OUTPUT") "output messages",
       Option ['q'] ["questions"] (modOpt optQuestions "QUESTIONS") "questions", 
-      Option ['s'] ["script"] (maybeModOpt optScript "SCRIPT") "output script"]      
+      Option ['s'] ["script"] (maybeModOpt optScript "SCRIPT") "output script",
+      Option ['i'] ["input"] (maybeModOpt optInputt "INPUT") "input data",
+      Option ['d'] ["data"] (maybeModOpt optData "DATA") "output data"]      
       --Option ['h'] ["help"] (NoArg Help)]
 
 weekMap :: M.Map Int String
@@ -140,18 +145,18 @@ constructGraph li =
       G.mkGraph nodeList edgeList
 -}
 
+compilerOpts :: [String] -> IO (Options, [String])
+compilerOpts argv =
+      case getOpt Permute options argv of
+         (o,n,[]  ) -> return (foldl (flip id) defaultOptions o, n)
+         (_,_,errs) -> ioError (userError (concat errs ++ usageInfo header options))
+     where header = "Usage:" -- ic [OPTION...] files..."
+
 main = do
   args <- getArgs
-  -- settings
-  let weekNum = fromMaybe 1 $ fmap read $ args `mindex` 0
-  let matchEmail = "hearts.txt"
-  let nomatchEmail = "pass.txt"
-  let from = "holdenl@princeton.edu"::String
-  --let cc = "holdenl@princeton.edu"
-  let form = "responses.csv"
-  let sname = printf "hearts_%d" weekNum
-  let outputFile = printf "output_%d.txt" weekNum
-  let questionsFile = "questions.txt"
+  (opts, _) <- compilerOps args
+{-(w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, case opt^.optInput of {Nothing -> printf "data_%d.txt" (w-1); Just y -> y}, case opt^.optInput of {Nothing -> printf "data_%d.txt" (w); Just y -> y})-}
+  let (weekNum, form, from, matchEmail, nomatchEmail, outputFile, questionsFile, sname, inputFile, dataFile) = getOptions opts
   responses <- fmap fromRight $ parseFromFile csvFile form
   let l = length responses
   matchTemplate <- readFile matchEmail
@@ -163,7 +168,7 @@ main = do
   let nodeMap = M.fromList nodeList
   edges <- catchIOError
            (do 
-             f <- readFile (printf "data_%d.txt" (weekNum - 1))
+             f <- readFile dataFile
              return $ decode $ Char8.pack f)
            (\_ -> return [])
   let negG = negativeGraphFromEdges nodeList edges

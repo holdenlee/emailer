@@ -31,3 +31,5 @@ test/
 grades.csv
 OptionTest.hs
 PickleTest.hs
+responses.csv
+*.xlsx
