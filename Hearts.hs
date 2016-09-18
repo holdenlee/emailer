@@ -43,19 +43,6 @@ import qualified Data.ByteString.Lazy.Char8 as Char8
 import Utilities hiding (for)
 
 --todo: figure out flags, https://wiki.haskell.org/Tutorials/Programming_Haskell/Argument_handling, https://hackage.haskell.org/package/base-4.9.0.0/docs/System-Console-GetOpt.html
-{-
-data Flag
-        = Week Int              -- -w
-        | CSVFile String        -- -c
-        -- | CC String             -- -d
-        | From String           -- -f
-        | MatchEmail String     -- -m
-        | NoMatchEmail String   -- -n
-        | Output String         -- -o
-        | Questions String      -- -q
-        | Help                  -- --help
-        deriving (Eq,Ord,Enum,Show,Bounded)
--}
 
 data Options = Options
    { _optWeek :: Int
@@ -146,16 +133,6 @@ negativeGraphFromEdges nodeList li =
         diff = pairs \\ li'
     in
       G.mkGraph nodeList (map (\(x,y) -> (x,y,())) diff)
-
-{-
-constructGraph :: [[String]] -> G.Gr String ()
-constructGraph li = 
-    let
-        nodeList = map (\i -> (i, (li!!i)!!1)) [1..(length li)-1]
-        edgeList = []
-    in 
-      G.mkGraph nodeList edgeList
--}
 
 compilerOpts :: [String] -> IO (Options, [String])
 compilerOpts argv =
