@@ -28,6 +28,7 @@
 *#
 emails/
 test/
+hearts/
 grades.csv
 OptionTest.hs
 PickleTest.hs
