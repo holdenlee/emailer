@@ -82,7 +82,7 @@ defaultOptions = Options
 
 getOptions :: Options -> (Int, String, String, String, String, String, String, String, String)
 getOptions opt = let w = opt^.optWeek in
-    (w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, case opt^.optInput of {Nothing -> printf "data_%d.txt" (w-1); Just y -> y}, case opt^.optData of {Nothing -> printf "data_%d.txt" (w); Just y -> y})
+    (w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "hearts/output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, case opt^.optInput of {Nothing -> printf "hearts/data_%d.txt" (w-1); Just y -> y}, case opt^.optData of {Nothing -> printf "hearts/data_%d.txt" (w); Just y -> y})
 
 {-
 makeOpt :: a -> String -> ArgDescr a 
