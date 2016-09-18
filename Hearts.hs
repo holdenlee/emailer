@@ -34,8 +34,11 @@ import Control.Lens
 import qualified Data.Graph.Inductive as G
 import Data.Graph.Inductive.Query.Matchings
 import Data.Binary
+import qualified Data.Bimap as B
+import System.Random.Shuffle
 
 import qualified Data.ByteString.Lazy.Char8 as Char8
+--import qualified Data.ByteString as B
 
 import Utilities hiding (for)
 
@@ -80,9 +83,18 @@ defaultOptions = Options
      _optInput = Nothing, 
      _optData = Nothing}
 
-getOptions :: Options -> (Int, String, String, String, String, String, String, String, String)
+getOptions :: Options -> (Int, String, String, String, String, String, String, String, String, String)
 getOptions opt = let w = opt^.optWeek in
-    (w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "hearts/output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, case opt^.optInput of {Nothing -> printf "hearts/data_%d.txt" (w-1); Just y -> y}, case opt^.optData of {Nothing -> printf "hearts/data_%d.txt" (w); Just y -> y})
+    (w, 
+     opt^.optCSV, 
+     opt^.optFrom, 
+     opt^.optMatch, 
+     opt^.optNoMatch, 
+     case opt^.optOutput of {Nothing -> printf "heart/output_%d.txt" w; Just y -> y}, 
+     opt^.optQuestions, 
+     case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, 
+     case opt^.optInput of {Nothing -> printf "heart/data_%d.txt" (w-1); Just y -> y}, 
+     case opt^.optData of {Nothing -> printf "heart/data_%d.txt" (w); Just y -> y})
 
 {-
 makeOpt :: a -> String -> ArgDescr a 
@@ -108,7 +120,7 @@ options =
       Option ['o'] ["output"] (maybeModOpt optOutput "OUTPUT") "output messages",
       Option ['q'] ["questions"] (modOpt optQuestions "QUESTIONS") "questions", 
       Option ['s'] ["script"] (maybeModOpt optScript "SCRIPT") "output script",
-      Option ['i'] ["input"] (maybeModOpt optInputt "INPUT") "input data",
+      Option ['i'] ["input"] (maybeModOpt optInput "INPUT") "input data",
       Option ['d'] ["data"] (maybeModOpt optData "DATA") "output data"]      
       --Option ['h'] ["help"] (NoArg Help)]
 
@@ -154,11 +166,11 @@ compilerOpts argv =
 
 main = do
   args <- getArgs
-  (opts, _) <- compilerOps args
-{-(w, opt^.optCSV, opt^.optFrom, opt^.optMatch, opt^.optNoMatch, case opt^.optOutput of {Nothing -> printf "output_%d.txt" w; Just y -> y}, opt^.optQuestions, case opt^.optScript of {Nothing -> printf "script_%d" w; Just y -> y}, case opt^.optInput of {Nothing -> printf "data_%d.txt" (w-1); Just y -> y}, case opt^.optInput of {Nothing -> printf "data_%d.txt" (w); Just y -> y})-}
+  (opts, _) <- compilerOpts args
   let (weekNum, form, from, matchEmail, nomatchEmail, outputFile, questionsFile, sname, inputFile, dataFile) = getOptions opts
   responses <- fmap fromRight $ parseFromFile csvFile form
-  let l = length responses
+  -- putStrLn (show responses)
+  let l = (length responses) - 1
   matchTemplate <- readFile matchEmail
   nomatchTemplate <- readFile nomatchEmail
   questions <- readFile questionsFile
@@ -167,10 +179,16 @@ main = do
   let nodeList = map (\i -> (i, (responses!!i)!!1)) [1..l]
   let nodeMap = M.fromList nodeList
   edges <- catchIOError
+           (parseFromFile csvFile dataFile >>= (\case
+               Left err -> ioError $ userError ""
+               Right li -> return $ map (\[x,y] -> (read x,read y)) li))
+           (\_ -> return [])
+{-
+  edges <- catchIOError
            (do 
              f <- readFile dataFile
              return $ decode $ Char8.pack f)
-           (\_ -> return [])
+           (\_ -> return [])-}
   let negG = negativeGraphFromEdges nodeList edges
   let toFilterOut = filter (\i -> (\case {Just True -> True; _ -> False}) $
                                 do
@@ -178,26 +196,39 @@ main = do
                                   return $ isInfixOf date ((responses!!i)!!4)
                            ) [1..l]
   let newG = negG & foldIterate G.delNode toFilterOut
-  let matching = maximumMatching newG
+  shuffled <- shuffleM [1..l] --randomness!
+  let b = B.fromList $ zip [1..l] shuffled
+  let shuffledG = mapNodes (\i -> b B.! i) newG
+  let shuffledMatching = maximumMatching shuffledG
+  let matching = map (\(i, j) -> (b B.!> i, b B.!> j)) shuffledMatching
   let allEdges = edges ++ matching
   let matchMap = M.fromList (matching ++ (map (\(x,y) -> (y,x)) matching))
+  writeFile outputFile ""
   for [1..l] $ \i -> do
-    let personFile = (printf "week%d_%s.txt" weekNum (nodeMap M.! i))
-    case M.lookup i matchMap of
+    let personFile = (printf "heart/week%d_%s.txt" weekNum (nodeMap M.! i))
+    sname' <- case M.lookup i matchMap of
       Just j -> do
           writeFile personFile 
               (printf matchTemplate
                       ((responses!!i)!!1) --name
                       ((responses!!j)!!1) --partner's name
                       ((responses!!j)!!2) --partner's email
+                      questions
               )
-          writeFile outputFile (printf "%s, %s" ((responses!!i)!!1) ((responses!!j)!!1))
+          appendFile outputFile (printf "%s, %s\n" ((responses!!i)!!1) ((responses!!j)!!1))
+          return sname
       Nothing -> 
           if i `elem` toFilterOut 
           then writeFile personFile
-                   (printf matchTemplate
-                    ((responses!!i)!!i)) --name
+                   (printf nomatchTemplate
+                    ((responses!!i)!!1)) >> return (sname++"_n")
           else writeFile personFile "" >> 
-               writeFile outputFile (printf "%s: UNMATCHED" ((responses!!i)!!1))
-    appendFile sname (printf "cat \"%s\" | email -s \"Artichoke heart-to-heart\" -cc \"%s\" %s\n" personFile from ((responses!!i)!!2)) 
+               appendFile outputFile (printf "%s: UNMATCHED\n" ((responses!!i)!!1)) >> return "scratch"
+    appendFile sname' (printf "cat \"%s\" | email -s \"Artichoke heart-to-heart\" -cc \"%s\" %s\n" personFile from ((responses!!i)!!2))
+--    Char8.writeFile dataFile $ encode allEdges
+    writeFile dataFile $ genCsvFile $ map (\(x,y) -> [show x, show y]) allEdges
 
+mapNodes :: (Int -> Int) -> G.Gr a b -> G.Gr a b
+mapNodes f g = 
+    G.gmap (\(adjs, n, x, adjs') -> 
+             (map (_2 %~ f) adjs, f n, x, map (_2 %~ f) adjs')) g 

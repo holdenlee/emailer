@@ -1,0 +1,8 @@
+Dear %s,
+
+Thanks for participating in Artichoke Heart-to-Hearts! You have indicated that you are not available the coming week, so I have not matched you up with anyone. If this is not true, let me know; otherwise, no action is necessary.
+
+Best,
+Holden
+
+This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs.
