@@ -204,6 +204,8 @@ main = do
   let allEdges = edges ++ matching
   let matchMap = M.fromList (matching ++ (map (\(x,y) -> (y,x)) matching))
   writeFile outputFile ""
+  writeFile sname ""
+  writeFile (sname++"_n") ""
   for [1..l] $ \i -> do
     let personFile = (printf "heart/week%d_%s.txt" weekNum (nodeMap M.! i))
     sname' <- case M.lookup i matchMap of

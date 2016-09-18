@@ -28,9 +28,13 @@
 *#
 emails/
 test/
-hearts/
+heart/
 grades.csv
 OptionTest.hs
 PickleTest.hs
 responses.csv
 *.xlsx
+script*
+scratch*
+data*
+output*
