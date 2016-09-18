@@ -1,0 +1,19 @@
+Dear %s,
+
+Thanks for signing up for Artichoke Heart-to-Hearts! Your conversation partner for this week is
+
+%s %s
+
+Get in touch and schedule a meal and conversation (or other activity) together sometime this coming week. 
+
+For inspiration, here are some conversation questions suggested by 2denizens:
+
+%s
+
+I will be sending out matches every Sunday morning. If you won't participate next week, please let me know by Saturday night.
+
+Best,
+Holden 
+
+This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs.
+

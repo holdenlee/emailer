@@ -29,3 +29,5 @@
 emails/
 test/
 grades.csv
+OptionTest.hs
+PickleTest.hs
