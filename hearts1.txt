@@ -1,6 +1,6 @@
 Dear %s,
 
-Welcome to week %d of Artichoke Heart-to-Hearts! Your conversation partner for this week is
+Thanks for signing up for Artichoke Heart-to-Hearts! Your conversation partner for this week is
 
 %s %s
 
@@ -8,7 +8,7 @@ Get in touch and schedule a meal and conversation (or other activity) together s
 
 For inspiration, at the bottom of this email are some questions suggested by 2denizens.
 
-I will be sending out matches every Sunday. If anything changes in your availability from what you wrote on the form, let me know by Saturday night. Also let me know any feedback and suggestions you have.
+I will be sending out matches every Sunday. If anything changes in your availability from what you wrote on the form, let me know by Saturday night.
 
 Best,
 Holden 

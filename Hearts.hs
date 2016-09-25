@@ -156,10 +156,11 @@ main = do
   let nodeList = map (\i -> (i, (responses!!i)!!1)) [1..l]
   let nodeMap = M.fromList nodeList
   edges <- catchIOError
-           (parseFromFile csvFile dataFile >>= (\case
-               Left err -> ioError $ userError ""
+           (parseFromFile csvFile inputFile >>= (\case
+               Left err -> putStrLn (show err) >> (ioError $ userError "")
                Right li -> return $ map (\[x,y] -> (read x,read y)) li))
            (\_ -> return [])
+  putStrLn (show edges)
 {-
   edges <- catchIOError
            (do 
@@ -190,6 +191,7 @@ main = do
           writeFile personFile 
               (printf matchTemplate
                       ((responses!!i)!!1) --name
+                      weekNum             --week number
                       ((responses!!j)!!1) --partner's name
                       ((responses!!j)!!2) --partner's email
                       questions

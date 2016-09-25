@@ -23,4 +23,27 @@ Send emails with grades from a CSV file and attachments from a folder, using a t
 *   Script produces one text file for each email. 
 *   Run the output file (default: `email_grades`). WARNING: This sends out all emails; you may want to check the text files first!
 
+# Heart-to-heart
 
+This is a script for pairing people with conversation partners. The flags are:
+
+* -w week number (default: 1)
+* -c csv file (default: responses.csv)
+* -f from email (default: holdenl@princeton.edu)
+* -m match email (default: hearts.txt
+* -n no-match email, for people who can't make it this week (default: pass.txt)
+* -o output file (default: output_<week number>.txt)
+* -q questions file (default: questions.txt)
+* -s output script (default: script_<week number>) (the no-match script has _n appended to it)
+* -i input data (default: data_<week number - 1>.txt)
+* -d output data (default: data_<week number>.txt)
+
+NOTE: The CSV reader expects a newline at the end. If you have parsing errors, check that this is true.
+
+Example (for week 2):
+
+```
+./Hearts -w2
+./script_2
+./script_2_n
+```
