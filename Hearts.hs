@@ -128,7 +128,7 @@ negativeGraphFromEdges :: [(Int, String)] -> [(Int, Int)] -> (G.Gr String ())
 negativeGraphFromEdges nodeList li = 
     let 
         n = length nodeList
-        pairs = [1..n] >>= (\x -> map (x,) [1..(x-1)])
+        pairs = [1..n] >>= (\x -> map (,x) [1..(x-1)])
         li' = map (\(x,y) -> (if y<x then (y,x) else (x,y))) li
         diff = pairs \\ li'
     in

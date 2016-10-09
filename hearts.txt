@@ -13,7 +13,7 @@ I will be sending out matches every Sunday. If anything changes in your availabi
 Best,
 Holden 
 
-This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs.
+This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs. (P.S. I just found and hopefully fixed a bug that caused repeated matches... let me know if this still happens.)
 
 ***
 
