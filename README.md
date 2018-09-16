@@ -36,14 +36,27 @@ This is a script for pairing people with conversation partners. The flags are:
 * -m match email (default: hearts.txt
 * -n no-match email, for people who can't make it this week (default: pass.txt)
 * -d odd-one-out email, for an unmatched person when there are an odd number of participants (default: odd.txt)
-* -o output file (default: output_<week number>.txt)
+* -o output file (default: `output_<week number>.txt`)
 * -q questions file (default: questions.txt)
-* -s output script (default: script_<week number>) (the no-match script has _n appended to it)
-* -i input data (default: data_<week number - 1>.txt)
-* -d output data (default: data_<week number>.txt)
-* -e file with people to exclude for this week (default: exclude_<week number>.txt) (a list of emails, one on each line)
+* -s output script (default: `script_<week number>`) (the no-match script has _n appended to it)
+* -i input data (default: `data_<week number - 1>.txt`)
+* -d output data (default: `data_<week number>.txt`)
+* -e file with people to exclude for this week (default: `exclude_<week number>.txt`) (a list of emails, one on each line)
 
 NOTE: The CSV reader expects a newline at the end. If you have parsing errors, check that this is true.
+
+Setup: 
+
+* Compile: `ghc Emailer`.
+* Collect responses with a form (such as [this](https://docs.google.com/forms/d/e/1FAIpQLSe6n8M3dObivlcfFSpeIRH9x4EseO7fgorG_3aszA4fiB3Izg/viewform)), and download it as `responses.csv`. (See note above on CSV parsing.)
+* Put the email text in `hearts.txt`, `pass.txt`, and `odd.txt`. Put the questions in `questions.txt`.
+* Initialize `data_0.txt` with a list of pairs of ID's of people who already know each other (so they won't be matched), in quotes. The ID is the row number (the first person is 1). Example: 
+  ```
+  "1","2"
+  "3","4"
+  
+  ```
+* For week `<k>`, write the emails of people to be excluded in `exclude_<k>.txt`, each on a separate line.
 
 Example (for week 2):
 
