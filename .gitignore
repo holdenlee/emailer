@@ -29,10 +29,10 @@
 emails/
 test/
 heart/
-grades.csv
+old/
+*.csv
 OptionTest.hs
 PickleTest.hs
-responses.csv
 *.xlsx
 script*
 scratch*
