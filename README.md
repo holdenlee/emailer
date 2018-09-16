@@ -47,7 +47,7 @@ NOTE: The CSV reader expects a newline at the end. If you have parsing errors, c
 
 Setup: 
 
-* Compile: `ghc Emailer`.
+* Compile: `ghc Hearts`.
 * Collect responses with a form (such as [this](https://docs.google.com/forms/d/e/1FAIpQLSe6n8M3dObivlcfFSpeIRH9x4EseO7fgorG_3aszA4fiB3Izg/viewform)), and download it as `responses.csv`. (See note above on CSV parsing.)
 * Put the email text in `hearts.txt`, `pass.txt`, and `odd.txt`. Put the questions in `questions.txt`.
 * Initialize `data_0.txt` with a list of pairs of ID's of people who already know each other (so they won't be matched), in quotes. The ID is the row number (the first person is 1). Example: 
@@ -61,7 +61,10 @@ Setup:
 Example (for week 2):
 
 ```
+ # create emails
 ./Hearts -w2
+ # sends emails for matches
 ./script_2
+ # sends emails for unmatched
 ./script_2_n
 ```
