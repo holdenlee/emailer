@@ -1,12 +1,6 @@
 Dear %s,
 
-Welcome to week %d of Artichoke Heart-to-Hearts! Your conversation partner for this week is
-
-%s %s
-
-Get in touch and schedule a meal and conversation (or other activity) together sometime this coming week.
-
-For inspiration, at the bottom of this email are some questions suggested by 2denizens. %s
+Welcome to week %d of Artichoke Heart-to-Hearts! Due to an odd number of participating artichokes, we don't have a match for you this week. Hang tight and we'll find a match for you next time!
 
 I will be sending out matches every Sunday. If you can't participate next week, let me know by Saturday night. Also let me know any feedback and suggestions you have.
 
@@ -14,7 +8,3 @@ Best,
 Holden 
 
 This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs.
-
-***
-
-%s

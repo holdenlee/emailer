@@ -23,7 +23,6 @@ import Data.Char
 import System.Directory
 import System.IO
 
-
 import Utilities hiding (for)
 
 main = do

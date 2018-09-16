@@ -1,0 +1,8 @@
+Dear %s,
+
+The first edition of Artichoke Heart-to-Hearts has come to an end. Thanks for being an awesome person who helped make these conversations happen! Please let me know any feedback you have for future heart-to-hearts.
+
+Best,
+Holden
+
+This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs.

@@ -4,11 +4,14 @@ Send emails with grades from a CSV file and attachments from a folder, using a t
 
 * [Haskell platform](https://www.haskell.org/)
     * You will need to `cabal install` several packages: `parsec`, `cassava`, `MissingH`.
+	* For Hearts, you will also need `bimap`, `random-shuffle`, and `graph-matchings`.
 * Script works under cygwin. Modifications may be necessary for other shells.
     * Requires `email`. Do `apt-cyg install email` and follow [instructions](http://jingkee.resharecle.com/?p=207) to configure `email`.
 	* Look up the SMTP info from your email provider. Ex. for Princeton, see [here](https://csguide.cs.princeton.edu/email/setup/imapconfig). (Replace with smtp.princeton.edu for general Princeton email.)
 
 # Instructions
+
+## Emailing grades
 
 * Write an email and save it as `email.txt`. For fields that are customized, use a keyword (ex. `NAME`). (`email.txt` gives a sample.)
 * Customize `Emailer.hs` as desired.
@@ -23,7 +26,7 @@ Send emails with grades from a CSV file and attachments from a folder, using a t
 *   Script produces one text file for each email. 
 *   Run the output file (default: `email_grades`). WARNING: This sends out all emails; you may want to check the text files first!
 
-# Heart-to-heart
+## Heart-to-heart
 
 This is a script for pairing people with conversation partners. The flags are:
 
@@ -32,11 +35,13 @@ This is a script for pairing people with conversation partners. The flags are:
 * -f from email (default: holdenl@princeton.edu)
 * -m match email (default: hearts.txt
 * -n no-match email, for people who can't make it this week (default: pass.txt)
+* -d odd-one-out email, for an unmatched person when there are an odd number of participants (default: odd.txt)
 * -o output file (default: output_<week number>.txt)
 * -q questions file (default: questions.txt)
 * -s output script (default: script_<week number>) (the no-match script has _n appended to it)
 * -i input data (default: data_<week number - 1>.txt)
 * -d output data (default: data_<week number>.txt)
+* -e file with people to exclude for this week (default: exclude_<week number>.txt) (a list of emails, one on each line)
 
 NOTE: The CSV reader expects a newline at the end. If you have parsing errors, check that this is true.
 

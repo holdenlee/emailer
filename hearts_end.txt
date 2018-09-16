@@ -1,0 +1,20 @@
+Dear %s,
+
+Welcome to week %d (the final week) of Artichoke Heart-to-Hearts! Your conversation partner for this week is
+
+%s %s
+
+Get in touch and schedule a meal and conversation (or other activity) together sometime this coming week.
+
+For inspiration, at the bottom of this email are some questions suggested by 2denizens.
+
+Thanks for being an awesome person who helped made these conversations happen! Please let me know any feedback you have for future heart-to-hearts.
+
+Best,
+Holden 
+
+This email has been sent out automatically by Emailer (https://github.com/holdenlee/Emailer). Please notify me of any bugs.
+
+***
+
+%s
